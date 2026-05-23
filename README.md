@@ -1,6 +1,6 @@
 # samsung-galaxybook-hotkey-dkms
 
-DKMS override for the Linux `samsung_galaxybook` platform driver with SAM0430 ACPI hotkey handling.
+Temporary DKMS override for the Linux `samsung_galaxybook` platform driver with SAM0430 ACPI hotkey handling.
 
 This fixes Fn hotkeys on Samsung Galaxy Book models where the firmware sends ACPI notifications instead of normal keyboard scancodes, including:
 
@@ -8,7 +8,17 @@ This fixes Fn hotkeys on Samsung Galaxy Book models where the firmware sends ACP
 - `0x6e` — mic mute
 - `0x6f` — camera / block-recording
 
-This is intended as a temporary compatibility package. Remove it once your kernel includes the upstream SAM0430 hotkey fix.
+Remove this package once your kernel includes the upstream SAM0430 hotkey fix.
+
+## Credits / provenance
+
+The `samsung-galaxybook` Linux platform driver was authored and upstreamed by **Joshua Grisham**.
+
+Original project and research repo:
+
+- https://github.com/joshuagrisham/samsung-galaxybook-extras
+
+This package does **not** vendor the driver source. Its `PKGBUILD` fetches a pinned Linux kernel source file and applies `sam0430-hotkeys.patch` as a small temporary compatibility patch.
 
 ## Install on Arch / Omarchy
 
@@ -25,12 +35,6 @@ Verify the patched module is active:
 
 ```bash
 cat /sys/module/samsung_galaxybook/srcversion
-```
-
-Expected patched `srcversion`:
-
-```text
-1FD9CB371240E868B48FC37
 ```
 
 Then test Fn+F9.

@@ -10,3 +10,7 @@ src/
 modules.order
 .*.cmd
 .tmp_versions/
+
+# Downloaded by makepkg from pinned Linux source URLs
+samsung-galaxybook.c
+firmware_attributes_class.h
