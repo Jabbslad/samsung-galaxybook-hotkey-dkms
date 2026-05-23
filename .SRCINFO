@@ -1,0 +1,20 @@
+pkgbase = samsung-galaxybook-hotkey-dkms
+	pkgdesc = DKMS override for samsung_galaxybook SAM0430 ACPI hotkeys
+	pkgver = 0.1
+	pkgrel = 1
+	url = https://github.com/joshuagrisham/samsung-galaxybook-extras
+	arch = any
+	license = GPL-2.0-or-later
+	depends = dkms
+	optdepends = linux-headers: headers for the stock Arch kernel
+	optdepends = linux-ptl-headers: headers for linux-ptl kernels
+	source = samsung-galaxybook.c
+	source = firmware_attributes_class.h
+	source = Makefile
+	source = dkms.conf
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+
+pkgname = samsung-galaxybook-hotkey-dkms

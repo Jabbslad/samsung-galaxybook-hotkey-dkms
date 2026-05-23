@@ -1,0 +1,12 @@
+*.pkg.tar.*
+*.pkg.tar.*.sig
+pkg/
+src/
+*.ko
+*.o
+*.mod
+*.mod.c
+*.symvers
+modules.order
+.*.cmd
+.tmp_versions/
