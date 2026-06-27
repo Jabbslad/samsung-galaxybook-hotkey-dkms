@@ -1,0 +1,30 @@
+Restore the keyboard backlight brightness across suspend/resume.
+
+On Samsung Galaxy Book models the firmware/EC resets the keyboard backlight
+to off while the system is suspended. The samsung-galaxybook driver registers
+the backlight as an LED class device but does not opt into the LED core's
+built-in suspend/resume save+restore mechanism, and the platform driver has
+no PM callbacks, so the user's brightness level is lost on resume.
+
+The LED core's led_suspend()/led_resume() handlers (drivers/leds/led-class.c)
+are gated entirely on the LED_CORE_SUSPENDRESUME flag. Setting it makes the
+core save led_cdev->brightness on suspend and re-apply it on resume via the
+driver's brightness_set_blocking op (kbd_backlight_acpi_set). Both software
+writes and Fn+F9 hardware cycling update led_cdev->brightness (the latter via
+led_set_brightness_sync), so the restored level is always correct.
+
+Original samsung-galaxybook driver author: Joshua Grisham <josh@joshuagrisham.com>
+Original project/research repo: https://github.com/joshuagrisham/samsung-galaxybook-extras
+Upstream Linux driver source: drivers/platform/x86/samsung-galaxybook.c
+
+--- samsung-galaxybook.c.orig
++++ samsung-galaxybook.c
+@@ -388,7 +388,7 @@ static int galaxybook_kbd_backlight_init(struct samsung_galaxybook *galaxybook)
+ 
+ 	galaxybook->kbd_backlight.brightness_get = kbd_backlight_show;
+ 	galaxybook->kbd_backlight.brightness_set_blocking = kbd_backlight_store;
+-	galaxybook->kbd_backlight.flags = LED_BRIGHT_HW_CHANGED;
++	galaxybook->kbd_backlight.flags = LED_BRIGHT_HW_CHANGED | LED_CORE_SUSPENDRESUME;
+ 	galaxybook->kbd_backlight.max_brightness = GB_KBD_BACKLIGHT_MAX_BRIGHTNESS;
+ 
+ 	return devm_led_classdev_register_ext(&galaxybook->platform->dev,

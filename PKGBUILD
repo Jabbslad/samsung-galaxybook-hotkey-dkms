@@ -4,14 +4,15 @@
 # See the original project/research repo for background and credits:
 #   https://github.com/joshuagrisham/samsung-galaxybook-extras
 #
-# This package fetches a pinned Linux source version and applies a small
-# temporary SAM0430 hotkey patch until the running kernel includes it.
+# This package fetches a pinned Linux source version and applies small
+# patches: SAM0430 ACPI hotkey handling (upstream as of Linux v7.1) and a
+# keyboard backlight suspend/resume restore fix (not yet upstream).
 
 pkgname=samsung-galaxybook-hotkey-dkms
 _pkgbase=samsung-galaxybook-hotkey
-pkgver=0.2
+pkgver=0.3
 pkgrel=1
-pkgdesc='DKMS override for samsung_galaxybook SAM0430 ACPI hotkeys'
+pkgdesc='DKMS override for samsung_galaxybook: SAM0430 ACPI hotkeys + kbd backlight suspend/resume fix'
 arch=('any')
 url='https://github.com/joshuagrisham/samsung-galaxybook-extras'
 license=('GPL-2.0-or-later')
@@ -25,10 +26,11 @@ source=(
   "samsung-galaxybook.c::https://raw.githubusercontent.com/torvalds/linux/${_linux_commit}/drivers/platform/x86/samsung-galaxybook.c"
   "firmware_attributes_class.h::https://raw.githubusercontent.com/torvalds/linux/${_linux_commit}/drivers/platform/x86/firmware_attributes_class.h"
   'sam0430-hotkeys.patch'
+  'kbd-backlight-suspend-resume.patch'
   'Makefile'
   'dkms.conf'
 )
-sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
+sha256sums=('SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP' 'SKIP')
 
 prepare() {
   cd "${srcdir}"
@@ -39,6 +41,7 @@ prepare() {
   cp samsung-galaxybook.c.orig samsung-galaxybook.c
 
   patch -Np0 -i sam0430-hotkeys.patch
+  patch -Np0 -i kbd-backlight-suspend-resume.patch
 }
 
 package() {
